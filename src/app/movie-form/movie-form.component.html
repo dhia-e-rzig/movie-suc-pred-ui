@@ -1,0 +1,70 @@
+<div class="container">
+
+  <div [hidden]="submitted">
+    <h1>Movie Form Form</h1>
+    <form (ngSubmit)="onSubmit()" #movieForm="ngForm">
+      {{diagnostic}}
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" class="form-control" id="name" name="name" required [(ngModel)]="model.name">
+      </div>
+
+      <div class="form-group">
+        <label for="wins">Number of wins</label>
+        <input type="number" class="form-control" id="wins" name="wins" [(ngModel)]="model.wins">
+      </div>
+      <div class="form-group">
+        <label for="reviews">Number of reviews</label>
+        <input type="number" class="form-control" id="reviews" name="reviews" [(ngModel)]="model.reviews">
+      </div>
+
+      <div class="form-group">
+        <label for="photos">Number of photos</label>
+        <input type="number" class="form-control" id="photos" name="photos" [(ngModel)]="model.photos">
+      </div>
+
+      <!-- <div class="form-group">
+      <label for="genres">Hero Power</label>
+      <select class="form-control" id="genres" required>
+        <option *ngFor="let pow of powers" [value]="genres">{{pow}}</option>
+      </select>
+    </div> -->
+
+      <div class="form-group">
+        <label for="director">Director</label>
+        <input type="text" class="form-control" id="director" name="director" [(ngModel)]="model.director">
+      </div>
+
+      <div class="form-group">
+        <label for="country">Country</label>
+        <input type="text" class="form-control" id="country" name="country" [(ngModel)]="model.country">
+      </div>
+
+      <div class="form-group">
+        <label for="language">Language</label>
+        <input type="text" class="form-control" id="language" name="language" [(ngModel)]="model.language">
+      </div>
+
+      <div class="form-group">
+        <label for="content_rating">Content Rating</label>
+        <input type="text" class="form-control" id="content_rating" name="content_rating"
+          [(ngModel)]="model.content_rating">
+      </div>
+      <div class="form-group">
+        <label for="genres">Content Rating</label>
+        <input type="text" class="form-control" id="genres" name="genres"
+          [(ngModel)]="model.genres">
+      </div>
+
+
+
+      <button type="submit" class="btn btn-success">Submit</button>
+
+    </form>
+  </div>
+
+  <div [hidden]="!submitted">
+     {{this.result}}
+      <h2>You submitted !</h2>
+  </div>
+</div>
