@@ -6,6 +6,9 @@ import { AppComponent } from './app.component';
 import { MovieFormComponent } from './movie-form/movie-form.component';
 import { HttpClientModule } from '@angular/common/http';
 import{ ProcessHTTPMsgService } from './process-httpmsg.service';
+
+import  {DataLoaderService} from './data-loader/data-loader.service';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -16,7 +19,9 @@ import{ ProcessHTTPMsgService } from './process-httpmsg.service';
     HttpClientModule,
     FormsModule
   ],
-  providers: [ProcessHTTPMsgService],
+  providers: [ProcessHTTPMsgService,
+    DataLoaderService
+    ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

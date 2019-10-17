@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import{HttpClient,HttpHeaders} from '@angular/common/http';
+import {Component, Inject, OnInit} from '@angular/core';
+import{HttpClient, HttpHeaders} from '@angular/common/http';
 import { ProcessHTTPMsgService } from '../process-httpmsg.service';
 import {Movie} from '../movie';
 import { Observable,of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators'
 import { Props } from '../props';
+import{DataLoaderService} from '../data-loader/data-loader.service';
 
 @Component({
   selector: 'app-movie-form',
@@ -13,51 +14,40 @@ import { Props } from '../props';
 })
 export class MovieFormComponent implements OnInit {
   model =new Movie;
-  directors=[];
+  tempsults= [];
+  //result: Object;
   actors=[];
+  directors=[];
   countries=[];
   languages=[];
   ratings=[];
   submitted = false;
   errMess= "";
-  result="";
-   httpOptions = {
+  httpOptions = {
     headers: new HttpHeaders({
       'Content-Type':  'application/json'
     })
   };
-  
-  constructor(private http: HttpClient,
-    private processHTTPMsgService: ProcessHTTPMsgService) {
-      
+
+  constructor( private http: HttpClient, private processHTTPMsgService: ProcessHTTPMsgService,private dataService: DataLoaderService) {
+
     }
 
   ngOnInit() {
-      this.http.get<any>("http://127.0.0.1:8000/get-directors")
-     .pipe(catchError(this.processHTTPMsgService.handleError))
-     .subscribe( result => this.directors= result, errmess => this.errMess = errmess);
-      this.http.get<Props[]>("http://127.0.0.1:8000/get-actors")
-      .pipe(catchError(this.processHTTPMsgService.handleError))
-      .subscribe(result => this.actors=<any>result, errmess => this.errMess = <any>errmess);
-      this.http.get<Props[]>("http://127.0.0.1:8000/get-countries")
-      .pipe(catchError(this.processHTTPMsgService.handleError))
-      .subscribe(result => this.countries=<any>result, errmess => this.errMess = <any>errmess);
-      this.http.get<Props[]>("http://127.0.0.1:8000/get-languages")
-      .pipe(catchError(this.processHTTPMsgService.handleError))
-      .subscribe(result => this.languages=<any>result, errmess => this.errMess = <any>errmess);
-      this.http.get<Props[]>("http://127.0.0.1:8000/get-content-rating")
-      .pipe(catchError(this.processHTTPMsgService.handleError))
-      .subscribe(result => this.ratings=<any>result,errmess => this.errMess = <any>errmess);
+    this.dataService.getDirectors().subscribe(results => this.directors.push(results), errmsg => this.errMess = errmsg);
+    this.dataService.getActors().subscribe(results => this.actors.push(results), errmsg => this.errMess = errmsg);
+    this.dataService.getCountries().subscribe(results => this.countries.push(results), errmsg => this.errMess = errmsg );
+    this.dataService.getLanguages().subscribe(results => this.languages.push(results), errmsg => this.errMess = errmsg );
+    this.dataService.getRatings().subscribe(results => this.ratings.push(results), errmsg => this.errMess = errmsg );
   }
 
-  
-  onSubmit() { 
-    
-    var ret=this.http.post<Movie>("http://127.0.0.1:8000/predict",this.model,this.httpOptions).pipe(catchError(this.processHTTPMsgService.handleError)); 
-    ret.subscribe(result => this.result=<any>result,
-      errmess => this.errMess = <any>errmess);
+  onSubmit() {
+
+    var ret=this.http.post<Movie>("http://127.0.0.1:8000/predict",this.model,this.httpOptions).pipe(catchError(this.processHTTPMsgService.handleError));
+    //ret.subscribe(result => this.result=<any>result,
+     // errmess => this.errMess = <any>errmess);
     console.log(this.errMess);
-    this.submitted = true; 
+    this.submitted = true;
   }
   get diagnostic() { return JSON.stringify(this.model); }
 
